@@ -38,7 +38,7 @@ public class DefaultCommentGenerator
         String s = getDateString();
         if (s != null) {
             sb.setLength(0);
-            sb.append("@mbggenerated");
+//            sb.append("@mbggenerated");
             sb.append("  ");
             sb.append(s);
             sb.append('.');
@@ -63,7 +63,7 @@ public class DefaultCommentGenerator
         javaElement.addJavaDocLine(" *");
         StringBuilder sb = new StringBuilder();
         sb.append(" * ");
-        sb.append("@mbggenerated");
+//        sb.append("@mbggenerated");
         if (markAsDoNotDelete) {
             sb.append(" do_not_delete_during_merge");
         }

@@ -65,6 +65,9 @@ public class UpdateByPrimaryKeySelectiveElementGenerator extends
 
         for (IntrospectedColumn introspectedColumn : introspectedTable
                 .getNonPrimaryKeyColumns()) {
+            if (UpdateFilter.isUpdateFilterColumn(introspectedColumn)) {
+                continue;
+            }
             XmlElement isNotNullElement = new XmlElement("if"); //$NON-NLS-1$
             sb.setLength(0);
             sb.append(introspectedColumn.getJavaProperty());
@@ -86,6 +89,9 @@ public class UpdateByPrimaryKeySelectiveElementGenerator extends
         boolean and = false;
         for (IntrospectedColumn introspectedColumn : introspectedTable
                 .getPrimaryKeyColumns()) {
+            if (UpdateFilter.isUpdateFilterColumn(introspectedColumn)) {
+                continue;
+            }
             sb.setLength(0);
             if (and) {
                 sb.append("  and "); //$NON-NLS-1$

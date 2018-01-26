@@ -15,8 +15,6 @@
  */
 package org.mybatis.generator.codegen.mybatis3.xmlmapper.elements;
 
-import java.util.Iterator;
-
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.dom.OutputUtilities;
 import org.mybatis.generator.api.dom.xml.Attribute;
@@ -24,16 +22,16 @@ import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
 
+import java.util.List;
+
 /**
- * 
  * @author Jeff Butler
- * 
  */
 public class UpdateByPrimaryKeyWithoutBLOBsElementGenerator extends
         AbstractXmlElementGenerator {
 
     private boolean isSimple;
-    
+
     public UpdateByPrimaryKeyWithoutBLOBsElementGenerator(boolean isSimple) {
         super();
         this.isSimple = isSimple;
@@ -59,29 +57,56 @@ public class UpdateByPrimaryKeyWithoutBLOBsElementGenerator extends
         sb.setLength(0);
         sb.append("set "); //$NON-NLS-1$
 
-        Iterator<IntrospectedColumn> iter;
+//        Iterator<IntrospectedColumn> iter;
+//        if (isSimple) {
+//            iter = introspectedTable.getNonPrimaryKeyColumns().iterator();
+//        } else {
+//            iter = introspectedTable.getBaseColumns().iterator();
+//        }
+//        while (iter.hasNext()) {
+//            IntrospectedColumn introspectedColumn = iter.next();
+//            if (UpdateFilter.isUpdateFilterColumn(introspectedColumn)) {
+//                continue;
+//            }
+//            sb.append(MyBatis3FormattingUtilities
+//                    .getEscapedColumnName(introspectedColumn));
+//            sb.append(" = "); //$NON-NLS-1$
+//            sb.append(MyBatis3FormattingUtilities
+//                    .getParameterClause(introspectedColumn));
+//
+//            if (iter.hasNext()) {
+//                sb.append(',');
+//            }
+//            answer.addElement(new TextElement(sb.toString()));
+//
+//            // set up for the next column
+//            if (iter.hasNext()) {
+//                sb.setLength(0);
+//                OutputUtilities.xmlIndent(sb, 1);
+//            }
+//        }
+        //重写update sql生成
+        List<IntrospectedColumn> columnList;
         if (isSimple) {
-            iter = introspectedTable.getNonPrimaryKeyColumns().iterator();
+            columnList = introspectedTable.getNonPrimaryKeyColumns();
         } else {
-            iter = introspectedTable.getBaseColumns().iterator();
+            columnList = introspectedTable.getBaseColumns();
         }
-        while (iter.hasNext()) {
-            IntrospectedColumn introspectedColumn = iter.next();
-
-            sb.append(MyBatis3FormattingUtilities
-                    .getEscapedColumnName(introspectedColumn));
-            sb.append(" = "); //$NON-NLS-1$
-            sb.append(MyBatis3FormattingUtilities
-                    .getParameterClause(introspectedColumn));
-
-            if (iter.hasNext()) {
-                sb.append(',');
-            }
-
-            answer.addElement(new TextElement(sb.toString()));
-
-            // set up for the next column
-            if (iter.hasNext()) {
+        for (IntrospectedColumn introspectedColumn : columnList) {
+            if (!UpdateFilter.isUpdateFilterColumn(introspectedColumn)) {
+                sb.append(MyBatis3FormattingUtilities
+                        .getAliasedEscapedColumnName(introspectedColumn));
+                sb.append(" = "); //$NON-NLS-1$
+                sb.append(MyBatis3FormattingUtilities.getParameterClause(introspectedColumn)); //$NON-NLS-1$
+                int index = columnList.indexOf(introspectedColumn);
+                if (index < columnList.size()) {
+                    IntrospectedColumn nextColumn = columnList.get(index + 1);
+                    if (!UpdateFilter.isUpdateFilterColumn(nextColumn)) {
+                        sb.append(',');
+                    }
+                }
+                answer.addElement(new TextElement(sb.toString()));
+                // set up for the next column
                 sb.setLength(0);
                 OutputUtilities.xmlIndent(sb, 1);
             }

@@ -22,9 +22,7 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
 
 /**
- * 
  * @author Jeff Butler
- * 
  */
 public class UpdateByExampleSelectiveElementGenerator extends
         AbstractXmlElementGenerator {
@@ -37,9 +35,7 @@ public class UpdateByExampleSelectiveElementGenerator extends
     public void addElements(XmlElement parentElement) {
         XmlElement answer = new XmlElement("update"); //$NON-NLS-1$
 
-        answer
-                .addAttribute(new Attribute(
-                        "id", introspectedTable.getUpdateByExampleSelectiveStatementId())); //$NON-NLS-1$
+        answer.addAttribute(new Attribute("id", introspectedTable.getUpdateByExampleSelectiveStatementId())); //$NON-NLS-1$
 
         answer.addAttribute(new Attribute("parameterType", "map")); //$NON-NLS-1$ //$NON-NLS-2$
 
@@ -56,6 +52,9 @@ public class UpdateByExampleSelectiveElementGenerator extends
 
         for (IntrospectedColumn introspectedColumn : introspectedTable
                 .getAllColumns()) {
+            if (UpdateFilter.isUpdateFilterColumn(introspectedColumn)) {
+                continue;
+            }
             XmlElement isNotNullElement = new XmlElement("if"); //$NON-NLS-1$
             sb.setLength(0);
             sb.append(introspectedColumn.getJavaProperty("record.")); //$NON-NLS-1$

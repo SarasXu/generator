@@ -1,8 +1,15 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="generator:jar">
+  <artifact build-on-make="true" name="generator:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/generator_jar</output-path>
-    <root id="archive" name="generator.jar">
-      <element id="module-output" name="generator" />
+    <root id="root">
+      <element id="archive" name="generator.jar">
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/my/META-INF/MANIFEST.MF" />
+        </element>
+        <element id="module-output" name="generator" />
+      </element>
+      <element id="file-copy" path="$USER_HOME$/tools/log4j-1.2.14.jar" />
+      <element id="file-copy" path="$USER_HOME$/tools/apache-ant-1.8.2.jar" />
     </root>
   </artifact>
 </component>

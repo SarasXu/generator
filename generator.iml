@@ -10,7 +10,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://D:/upload/ant-1.10.1.jar!/" />
+          <root url="jar://$USER_HOME$/tools/log4j-1.2.14.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -19,7 +19,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://D:/upload/log4j-over-slf4j-1.7.24.jar!/" />
+          <root url="jar://$USER_HOME$/tools/apache-ant-1.8.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

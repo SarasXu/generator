@@ -15,8 +15,6 @@
  */
 package org.mybatis.generator.codegen.mybatis3.xmlmapper.elements;
 
-import java.util.Iterator;
-
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.dom.OutputUtilities;
 import org.mybatis.generator.api.dom.xml.Attribute;
@@ -25,9 +23,7 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
 
 /**
- * 
  * @author Jeff Butler
- * 
  */
 public class UpdateByPrimaryKeyWithBLOBsElementGenerator extends
         AbstractXmlElementGenerator {
@@ -66,25 +62,47 @@ public class UpdateByPrimaryKeyWithBLOBsElementGenerator extends
         sb.setLength(0);
         sb.append("set "); //$NON-NLS-1$
 
-        Iterator<IntrospectedColumn> iter = introspectedTable
-                .getNonPrimaryKeyColumns().iterator();
-        while (iter.hasNext()) {
-            IntrospectedColumn introspectedColumn = iter.next();
+//        Iterator<IntrospectedColumn> iter = introspectedTable
+//                .getNonPrimaryKeyColumns().iterator();
+//        while (iter.hasNext()) {
+//            IntrospectedColumn introspectedColumn = iter.next();
+//            if (UpdateFilter.isUpdateFilterColumn(introspectedColumn)) {
+//                continue;
+//            }
+//            sb.append(MyBatis3FormattingUtilities
+//                    .getEscapedColumnName(introspectedColumn));
+//            sb.append(" = "); //$NON-NLS-1$
+//            sb.append(MyBatis3FormattingUtilities
+//                    .getParameterClause(introspectedColumn));
+//
+//            if (iter.hasNext()) {
+//                sb.append(',');
+//            }
+//
+//            answer.addElement(new TextElement(sb.toString()));
+//
+//            // set up for the next column
+//            if (iter.hasNext()) {
+//                sb.setLength(0);
+//                OutputUtilities.xmlIndent(sb, 1);
+//            }
+//        }
 
-            sb.append(MyBatis3FormattingUtilities
-                    .getEscapedColumnName(introspectedColumn));
-            sb.append(" = "); //$NON-NLS-1$
-            sb.append(MyBatis3FormattingUtilities
-                    .getParameterClause(introspectedColumn));
-
-            if (iter.hasNext()) {
-                sb.append(',');
-            }
-
-            answer.addElement(new TextElement(sb.toString()));
-
-            // set up for the next column
-            if (iter.hasNext()) {
+        for (IntrospectedColumn introspectedColumn : introspectedTable.getAllColumns()) {
+            if (!UpdateFilter.isUpdateFilterColumn(introspectedColumn)) {
+                sb.append(MyBatis3FormattingUtilities
+                        .getAliasedEscapedColumnName(introspectedColumn));
+                sb.append(" = "); //$NON-NLS-1$
+                sb.append(MyBatis3FormattingUtilities.getParameterClause(introspectedColumn)); //$NON-NLS-1$
+                int index = introspectedTable.getAllColumns().indexOf(introspectedColumn);
+                if (index < introspectedTable.getAllColumns().size()) {
+                    IntrospectedColumn nextColumn = introspectedTable.getAllColumns().get(index + 1);
+                    if (!UpdateFilter.isUpdateFilterColumn(nextColumn)) {
+                        sb.append(',');
+                    }
+                }
+                answer.addElement(new TextElement(sb.toString()));
+                // set up for the next column
                 sb.setLength(0);
                 OutputUtilities.xmlIndent(sb, 1);
             }
